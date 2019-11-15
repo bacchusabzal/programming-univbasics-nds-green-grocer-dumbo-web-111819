@@ -92,19 +92,21 @@ def checkout(cart, coupons)
   # BEFORE it begins the work of calculating the total (or else you might have
   # some irritated customers
   def checkout(cart: [], coupons: [])
-  cart = consolidate_cart(cart: cart)
-
-  cart = apply_coupons(cart: cart, coupons: coupons)
-  cart = apply_clearance(cart: cart)
-  total = 0
-  cart.each do |item_name, item_data|
-    total += (item_data[:price] * item_data[:count])
+   checkout = consolidate_cart( cart )
+  checkout = apply_coupons( checkout, coupons )
+  checkout = apply_clearance( checkout )
+  
+  index = 0
+  grand_total = 0
+  
+  while index < checkout.size do
+    current_item_total = checkout[index][:price] * checkout[index][:count]
+    current_item_total.round(2)
+    grand_total += current_item_total
+    index += 1
   end
-
-  if total > 100
-    0.9 * total
-  else
-    total
+  if ( grand_total > 100 )
+    grand_total *= 0.90
   end
-end
+  grand_total
 end
