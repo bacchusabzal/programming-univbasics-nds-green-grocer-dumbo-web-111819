@@ -67,11 +67,18 @@ def apply_clearance(cart)
   #
   # REMEMBER: This method **should** update cart
   
-  cart.each do |item_name, item_data|
-    if item_data[:clearance]
-      item_data[:price] = (item_data[:price] * 0.8).round(1)
+   cart_index = 0
+  ready_for_checkout = Array.new
+  
+  while cart_index < cart.size do
+    current_item = cart[cart_index]
+    if ( current_item[:clearance] )
+      current_item[:price] = current_item[:price] - ( current_item[:price] * 0.20 )
     end
+    ready_for_checkout.push( current_item )
+    cart_index += 1 
   end
+  ready_for_checkout
 end
 
 def checkout(cart, coupons)
